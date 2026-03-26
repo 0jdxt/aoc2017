@@ -1,4 +1,4 @@
-open Aocaml
+open Aoc2017
 
 let () =
   Printf.printf "1 ╶┰╴%d\n" (Day1.part1 ());

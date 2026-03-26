@@ -1,6 +1,6 @@
 (lang dune 3.21)
 
-(name aocaml)
+(name aoc2017)
 
 (generate_opam_files true)
 
@@ -16,7 +16,7 @@
 (documentation https://url/to/documentation)
 
 (package
- (name aocaml)
+ (name aoc2017)
  (synopsis "A short synopsis")
  (description "A longer description")
  (depends ocaml dune batteries)

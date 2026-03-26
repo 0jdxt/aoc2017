@@ -1,4 +1,4 @@
 (library
- (name aocaml)
+ (name aoc2017)
  (libraries batteries)
  )
