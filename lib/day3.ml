@@ -9,7 +9,7 @@ let part1 () =
   let ring = side / 2 in
   let offset = ((k * k) - target) mod side in
   let dist = abs (offset - ring) in
-  ring + dist
+  Results.Int' (ring + dist)
 
 let part2 () =
   let cells = Hashtbl.create 100 in
@@ -56,4 +56,4 @@ let part2 () =
         if !step_count mod 2 = 0 then incr len);
       loop ())
   in
-  loop ()
+  Results.Int' (loop ())

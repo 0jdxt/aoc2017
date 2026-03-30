@@ -21,7 +21,7 @@ let is_valid f =
       done;
       if not !dup then incr sum)
     passphrases;
-  !sum
+  Results.Int' !sum
 
 let part1 () = is_valid Fun.id
 
