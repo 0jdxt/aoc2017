@@ -25,6 +25,8 @@ let days =
     { part1 = Day21.part1; part2 = Day21.part2 };
     { part1 = Day22.part1; part2 = Day22.part2 };
     { part1 = Day23.part1; part2 = Day23.part2 };
+    { part1 = Day24.part1; part2 = Day24.part2 };
+    { part1 = Day25.part1; part2 = Day25.part2 };
   |]
 
 let get day = if day > Array.length days then None else Some days.(day - 1)

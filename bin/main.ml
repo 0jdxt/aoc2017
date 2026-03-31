@@ -10,13 +10,13 @@ let time f =
 let run_part label f =
   let res, t = time f in
   let r = match res with Int' i -> string_of_int i | Str' s -> s in
-  Printf.printf "\t%s %-10s (%.6fs)\n" label r t;
+  Printf.printf "%s %-20s (%.6fs)\n" label r t;
   t
 
 let run_day day_num (d : Registry.day) =
-  Printf.printf "Day %02d:" day_num;
+  Printf.printf "%02d:" day_num;
   let t1 = run_part "╶┰" d.part1 in
-  let t2 = run_part " ┖" d.part2 in
+  let t2 = run_part "    ┖" d.part2 in
   t1 +. t2
 
 let find_day day_num =
