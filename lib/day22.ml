@@ -1,69 +1,77 @@
-open Batteries
-
 type state = Clean | Weakened | Infected | Flagged
 
-let get_nodes () =
-  let lines = File.lines_of "data/day22.txt" |> Array.of_enum in
+let min_x, max_x = (-182, 180)
+let min_y, max_y = (-173, 216)
+let width = max_x - min_x + 1
+let height = max_y - min_y + 1
+let offset_x = -min_x
+let offset_y = -min_y
+let dx = [| 0; 1; 0; -1 |]
+let dy = [| 1; 0; -1; 0 |]
+
+let get_grid () =
+  let grid = Array.make_matrix width height Clean in
+  let lines = BatFile.lines_of "data/day22.txt" |> BatArray.of_enum in
   let size = Array.length lines in
   let offset = size / 2 in
-  let infected = Hashtbl.create 100_000 in
   Array.iteri
     (fun y line ->
       String.iteri
         (fun x c ->
           if c = '#' then
-            let px = x - offset in
-            let py = offset - y in
-            Hashtbl.add infected (px, py) Infected)
+            let px = x - offset + offset_x in
+            let py = offset - y + offset_y in
+            grid.(px).(py) <- Infected)
         line)
     lines;
-  infected
-
-let left (dx, dy) = (-dy, dx)
-let right (dx, dy) = (dy, -dx)
-let rev (dx, dy) = (-dx, -dy)
-let add (x0, y0) (x1, y1) = (x0 + x1, y0 + y1)
+  grid
 
 let part1 () =
-  let nodes = get_nodes () in
-  let pos_x = ref 0 in
-  let pos_y = ref 0 in
-  let dir = ref (0, 1) in
-  let infections = ref 0 in
+  let pos_x = ref offset_x
+  and pos_y = ref offset_y
+  and dir = ref 0 (* 0=up, 1=right, 2=down, 3=left *)
+  and infections = ref 0 in
+
+  let grid = get_grid () in
   for _ = 1 to 10_000 do
-    if Hashtbl.mem nodes (!pos_x, !pos_y) then (
-      dir := right !dir;
-      Hashtbl.remove nodes (!pos_x, !pos_y))
+    if grid.(!pos_x).(!pos_y) = Infected then (
+      dir := (!dir + 1) land 3;
+      grid.(!pos_x).(!pos_y) <- Clean)
     else (
-      dir := left !dir;
-      Hashtbl.add nodes (!pos_x, !pos_y) Infected;
+      dir := (!dir + 3) land 3;
+      grid.(!pos_x).(!pos_y) <- Infected;
       incr infections);
 
-    pos_x := !pos_x + fst !dir;
-    pos_y := !pos_y + snd !dir
+    pos_x := !pos_x + dx.(!dir);
+    pos_y := !pos_y + dy.(!dir)
   done;
+
   Results.Int' !infections
 
 let part2 () =
-  let nodes = get_nodes () in
-  let pos = ref (0, 0) in
-  let dir = ref (0, 1) in
+  let pos_x = ref offset_x in
+  let pos_y = ref offset_y in
+  let dir = ref 0 in
   let infections = ref 0 in
+
+  let grid = get_grid () in
   for _ = 1 to 10_000_000 do
-    let state = Hashtbl.find_default nodes !pos Clean in
+    let state = grid.(!pos_x).(!pos_y) in
     (match state with
     | Clean ->
-        dir := left !dir;
-        Hashtbl.replace nodes !pos Weakened
+        dir := (!dir + 3) land 3;
+        grid.(!pos_x).(!pos_y) <- Weakened
     | Weakened ->
-        Hashtbl.replace nodes !pos Infected;
+        grid.(!pos_x).(!pos_y) <- Infected;
         incr infections
     | Infected ->
-        dir := right !dir;
-        Hashtbl.replace nodes !pos Flagged
+        dir := (!dir + 1) land 3;
+        grid.(!pos_x).(!pos_y) <- Flagged
     | Flagged ->
-        dir := rev !dir;
-        Hashtbl.replace nodes !pos Clean);
-    pos := add !pos !dir
+        dir := (!dir + 2) land 3;
+        grid.(!pos_x).(!pos_y) <- Clean);
+    pos_x := !pos_x + dx.(!dir);
+    pos_y := !pos_y + dy.(!dir)
   done;
+
   Results.Int' !infections
