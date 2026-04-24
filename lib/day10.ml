@@ -27,15 +27,12 @@ let part1 () =
 
 let knot_hash s =
   let bytes =
-    String.to_seq s |> Seq.map int_of_char |> List.of_seq |> fun l ->
-    l @ [ 17; 31; 73; 47; 23 ]
+    (String.to_seq s |> Seq.map int_of_char |> List.of_seq)
+    @ [ 17; 31; 73; 47; 23 ]
   in
   let nums = Array.init 256 Fun.id in
-
-  let pos = ref 0 in
-  let skip = ref 0 in
   for _ = 1 to 64 do
-    one_round pos skip nums bytes
+    one_round (ref 0) (ref 0) nums bytes
   done;
 
   List.init 16 (fun i ->
