@@ -1,6 +1,6 @@
 open Batteries
 
-let pipes =
+let pipes : (int, int list) Hashtbl.t =
   File.lines_of "data/day12.txt"
   |> Enum.map (fun ln ->
       String.split ln ~by:" <-> "
@@ -8,7 +8,7 @@ let pipes =
           rest |> String.split_on_string ~by:", " |> List.map int_of_string))
   |> Hashtbl.of_enum
 
-let rec visit_id seen id =
+let rec visit_id (seen : int array) (id : int) : unit =
   if seen.(id) = 0 then (
     seen.(id) <- 1;
     List.iter (visit_id seen) (Hashtbl.find pipes id))

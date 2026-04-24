@@ -5,7 +5,7 @@ let b_factor = 48271
 let low16 x = x land 0xFFFF
 
 (* fast mersenne prime modulo *)
-let mode x =
+let mode (x : int) : int =
   (* 0x7FFFFFFF *)
   let r = 2147483647 in
   let a = (x land r) + (x lsr 31) in

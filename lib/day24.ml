@@ -2,14 +2,14 @@ open Batteries
 
 type comp = { lo : int; hi : int }
 
-let comps =
+let comps : comp array =
   File.lines_of "data/day24.txt"
   |> Enum.map (fun ln ->
       let x, y = String.split ~by:"/" ln |> Tuple2.mapn int_of_string in
       if x > y then { lo = y; hi = x } else { lo = x; hi = y })
   |> Array.of_enum
 
-let port_map =
+let port_map : int list array =
   let a = Array.make 51 [] in
   Array.iteri
     (fun i c ->
@@ -18,7 +18,7 @@ let port_map =
     comps;
   a
 
-let rec dfs mask port =
+let rec dfs (mask : int) (port : int) =
   let s = ref 0 in
   let l = ref (0, 0) in
   List.iter

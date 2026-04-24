@@ -7,31 +7,31 @@ type instruction = {
   c_reg : string;
 }
 
-let parse_line line =
+let parse_line (line : string) : instruction =
   match String.split_on_char ' ' line with
-  | [ a; b; c; "if"; e; f; g ] ->
-      let c = int_of_string c in
+  | [ reg; ud; n; "if"; c_reg; c; t ] ->
+      let n = int_of_string n in
       let op =
-        match b with
-        | "inc" -> fun x -> x + c
-        | "dec" -> fun x -> x - c
+        match ud with
+        | "inc" -> fun x -> x + n
+        | "dec" -> fun x -> x - n
         | _ -> failwith "unknown operation"
       in
-      let g = int_of_string g in
+      let t = int_of_string t in
       let comp =
-        match f with
-        | ">" -> fun x -> x > g
-        | "<" -> fun x -> x < g
-        | ">=" -> fun x -> x >= g
-        | "<=" -> fun x -> x <= g
-        | "==" -> fun x -> x = g
-        | "!=" -> fun x -> x <> g
+        match c with
+        | ">" -> fun x -> x > t
+        | "<" -> fun x -> x < t
+        | ">=" -> fun x -> x >= t
+        | "<=" -> fun x -> x <= t
+        | "==" -> fun x -> x = t
+        | "!=" -> fun x -> x <> t
         | _ -> failwith "unknown comp"
       in
-      { op; reg = a; comp; c_reg = e }
+      { op; reg; comp; c_reg }
   | _ -> failwith "invalid instruction"
 
-let program =
+let program : instruction list =
   File.lines_of "data/day8.txt" |> Enum.map parse_line |> List.of_enum
 
 let part1 () =

@@ -1,16 +1,17 @@
 open Batteries
 
-let one_round pos skip arr lengths =
-  let len = Array.length arr in
+let one_round (pos : int ref) (skip : int ref) (nums : int array)
+    (lengths : int list) =
+  let len = Array.length nums in
   List.iter
     (fun length ->
       if length <= len then (
         for i = 0 to (length / 2) - 1 do
           let a = (!pos + i) mod len in
           let b = (!pos + length - 1 - i) mod len in
-          let tmp = arr.(a) in
-          arr.(a) <- arr.(b);
-          arr.(b) <- tmp
+          let tmp = nums.(a) in
+          nums.(a) <- nums.(b);
+          nums.(b) <- tmp
         done;
         pos := (!pos + length + !skip) mod len;
         incr skip))
@@ -25,7 +26,7 @@ let part1 () =
   one_round (ref 0) (ref 0) nums lengths;
   Results.Int' (nums.(0) * nums.(1))
 
-let knot_hash s =
+let knot_hash (s : string) : string =
   let bytes =
     (String.to_seq s |> Seq.map int_of_char |> List.of_seq)
     @ [ 17; 31; 73; 47; 23 ]

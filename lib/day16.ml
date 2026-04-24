@@ -1,20 +1,20 @@
 open Batteries
 
-let programs = ref (Bytes.of_string "abcdefghijklmnop")
-let num_prog = Bytes.length !programs
-let offset = ref 0
+let programs : bytes ref = ref (Bytes.of_string "abcdefghijklmnop")
+let num_prog : int = Bytes.length !programs
+let offset : int ref = ref 0
 
 type move = Spin of int | Swap of (char * char) | Swapi of (int * int)
 
-let moves =
+let moves : string list =
   File.lines_of "data/day16.txt" |> Enum.get_exn |> String.split_on_char ','
 
-let swap a b =
+let swap (a : int) (b : int) =
   let tmp = Bytes.get !programs a in
   Bytes.set !programs a (Bytes.get !programs b);
   Bytes.set !programs b tmp
 
-let dance move =
+let dance (move : string) =
   match String.get move 0 with
   | 's' ->
       let size = int_of_string (String.tail move 1) in
@@ -36,7 +36,7 @@ let dance move =
       swap ai bi
   | _ -> failwith "unknown move"
 
-let rotated_string () =
+let rotated_string () : string =
   let out = Bytes.create num_prog in
   for i = 0 to num_prog - 1 do
     Bytes.set out i (Bytes.get !programs ((!offset + i) mod num_prog))

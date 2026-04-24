@@ -1,13 +1,11 @@
 open Batteries
 
-let firewall =
+let firewall : (int * int) array =
   File.lines_of "data/day13.txt"
   |> Enum.map (fun ln ->
       Tuple2.mapn int_of_string (String.split ln ~by:": ")
       |> Tuple2.map2 (fun r -> 2 * (r - 1)))
   |> Array.of_enum
-
-let is_caught idx period = idx mod period = 0
 
 let part1 () =
   let caught =

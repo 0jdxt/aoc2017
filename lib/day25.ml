@@ -1,6 +1,6 @@
 open Batteries
 
-let tape = Array.make 7113 0
+let tape : int array = Array.make 7113 0
 
 type s = A | B | C | D | E | F
 
@@ -33,7 +33,7 @@ let part1 () =
         tape.(!pos) <- 0;
         decr pos;
         state := D
-    | D, x ->
+    | D, _ ->
         tape.(!pos) <- 1;
         decr pos;
         state := A

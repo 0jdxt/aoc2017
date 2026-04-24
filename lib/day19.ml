@@ -2,13 +2,13 @@ open Batteries
 
 type cell = Path of char option | Junc | Empty
 
-let cell_of_char = function
+let cell_of_char : char -> cell = function
   | ' ' -> Empty
   | '+' -> Junc
   | '|' | '-' -> Path None
   | c -> Path (Some c)
 
-let grid =
+let grid : cell array =
   File.lines_of "data/day19.txt"
   |> List.of_enum |> Seq.of_list
   |> Seq.flat_map (fun s -> String.to_seq s |> Seq.map cell_of_char)

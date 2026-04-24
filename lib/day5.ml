@@ -1,6 +1,6 @@
 open Batteries
 
-let ins () =
+let ins () : int array =
   File.lines_of "data/day5.txt" |> Enum.map int_of_string |> Array.of_enum
 
 let jump new_offset =

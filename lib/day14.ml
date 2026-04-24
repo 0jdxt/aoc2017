@@ -1,9 +1,9 @@
 open Batteries
 
-let key = "wenycdww-"
-let grid_size = 128
-let grid = Array.init (grid_size * grid_size) (Fun.const 0)
-let coord x y = (x * grid_size) + y
+let key : string = "wenycdww-"
+let grid_size : int = 128
+let grid : int array = Array.init (grid_size * grid_size) (Fun.const 0)
+let coord (x : int) (y : int) : int = (x * grid_size) + y
 
 let part1 () =
   for row = 0 to grid_size - 1 do

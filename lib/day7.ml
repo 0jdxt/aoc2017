@@ -1,6 +1,6 @@
 open Batteries
 
-let programs =
+let programs : (string, int * string list) Hashtbl.t =
   File.lines_of "data/day7.txt"
   |> Enum.map (fun ln ->
       let info, ontop =
@@ -16,7 +16,7 @@ let programs =
 
 let part1 () =
   let referenced =
-    programs |> Hashtbl.to_seq_values
+    Hashtbl.to_seq_values programs
     |> Seq.flat_map (fun (_, ontop) -> Seq.of_list ontop)
     |> Set.of_seq
   in
@@ -26,7 +26,7 @@ let part1 () =
 
 let weight_cache = Hashtbl.create 1200
 
-let rec weight name =
+let rec weight (name : string) : int =
   match Hashtbl.find_opt weight_cache name with
   | Some w -> w
   | None ->

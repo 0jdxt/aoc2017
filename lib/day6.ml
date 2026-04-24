@@ -1,11 +1,11 @@
 open Batteries
 
-let get_banks () =
+let get_banks () : int array =
   File.lines_of "data/day6.txt"
   |> Enum.get_exn |> String.split_on_char '\t' |> List.map int_of_string
   |> Array.of_list
 
-let move_blocks banks =
+let move_blocks (banks : int array) =
   (* get bank w most blocks *)
   let max, max_i =
     Array.fold_lefti
@@ -20,7 +20,8 @@ let move_blocks banks =
     banks.(idx) <- banks.(idx) + 1
   done
 
-let hash_array arr = Array.fold_left (fun h x -> (h * 31) + x) 0 arr
+let hash_array (arr : int array) : int =
+  Array.fold_left (fun hash x -> (hash * 31) + x) 0 arr
 
 let part1 () =
   let rec loop steps seen banks =

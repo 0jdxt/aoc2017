@@ -6,16 +6,19 @@ type particle = {
   acc : int * int * int;
 }
 
-let man point =
+let man (p : particle) =
   let manhatten (x, y, z) = Int.abs x + Int.abs y + Int.abs z in
-  (manhatten point.acc, manhatten point.vel, manhatten point.pos)
+  (manhatten p.acc, manhatten p.vel, manhatten p.pos)
 
-let tick p =
-  let add3 (x0, y0, z0) (x1, y1, z1) = (x0 + x1, y0 + y1, z0 + z1) in
+let add3 ((x0, y0, z0) : int * int * int) ((x1, y1, z1) : int * int * int) :
+    int * int * int =
+  (x0 + x1, y0 + y1, z0 + z1)
+
+let tick (p : particle) =
   p.vel <- add3 p.vel p.acc;
   p.pos <- add3 p.pos p.vel
 
-let particles =
+let particles : particle array =
   File.lines_of "data/day20.txt"
   |> Enum.map (fun ln ->
       Scanf.sscanf ln "p=<%d,%d,%d>, v=<%d,%d,%d>, a=<%d,%d,%d>"
@@ -23,7 +26,7 @@ let particles =
           { pos = (x, y, z); vel = (vx, vy, vz); acc = (ax, ay, az) }))
   |> Array.of_enum
 
-let num_parts = Array.length particles
+let num_parts : int = Array.length particles
 
 let part1 () =
   let i, _ =

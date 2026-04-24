@@ -1,12 +1,12 @@
 open Batteries
 
-let passphrases =
+let passphrases : string array list =
   File.lines_of "data/day4.txt"
   |> Enum.map (fun ln ->
-      ln |> String.trim |> String.split_on_char ' ' |> Array.of_list)
+      String.trim ln |> String.split_on_char ' ' |> Array.of_list)
   |> List.of_enum
 
-let is_valid f =
+let is_valid (f : 'a -> 'b) =
   let sum = ref 0 in
   List.iter
     (fun phrase ->

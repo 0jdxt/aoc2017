@@ -1,6 +1,6 @@
 open Batteries
 
-let register =
+let register : (char, int) Hashtbl.t =
   String.to_seq "abcdefgh" |> Seq.map (fun c -> (c, 0)) |> Hashtbl.of_seq
 
 type target = Val of int | Reg of char
@@ -11,12 +11,14 @@ type instruction =
   | Sub of char * target
   | Jnz of target * int
 
-let get_target = function Val x -> x | Reg c -> Hashtbl.find register c
+let get_target : target -> int = function
+  | Val x -> x
+  | Reg c -> Hashtbl.find register c
 
-let to_target x =
-  match int_of_string_opt x with None -> Reg x.[0] | Some y -> Val y
+let to_target (s : string) : target =
+  match int_of_string_opt s with None -> Reg s.[0] | Some x -> Val x
 
-let ins =
+let ins : instruction array =
   File.lines_of "data/day23.txt"
   |> Enum.map (fun ln ->
       match String.split_on_char ' ' ln with

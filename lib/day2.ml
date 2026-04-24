@@ -1,10 +1,10 @@
 open Batteries
 open Results
 
-let rows =
+let rows : int array list =
   File.lines_of "data/day2.txt"
   |> Enum.map (fun ln ->
-      ln |> String.trim
+      String.trim ln
       |> String.split_on_string ~by:"\t"
       |> List.map int_of_string |> Array.of_list)
   |> List.of_enum

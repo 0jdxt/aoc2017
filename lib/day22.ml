@@ -9,7 +9,7 @@ let offset_y = -min_y
 let dx = [| 0; 1; 0; -1 |]
 let dy = [| 1; 0; -1; 0 |]
 
-let get_grid () =
+let get_grid () : state array array =
   let grid = Array.make_matrix width height Clean in
   let lines = BatFile.lines_of "data/day22.txt" |> BatArray.of_enum in
   let size = Array.length lines in
